@@ -4,6 +4,14 @@ from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 import snowflake.connector
 
+
+# Initialize connection.
+conn = st.connection("snowflake")
+
+
+
+
+
 # Write directly to the app
 st.title("Customize your Smoothie!")
 st.write(
@@ -14,9 +22,10 @@ st.write(
 name_on_order = st.text_input("Name on Smoothie:")
 st.write("The name on your smothie will be: ",name_on_order)
 
-#session = get_active_session()
 
-session = Session.builder.configs(connection_parameters).create()
+session = conn.session()
+    
+
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 #st.dataframe(data = my_dataframe, use_container_width=True)
 ingredients_list = st.multiselect("Choose up to 5 ingredients:",my_dataframe, max_selections =5)
