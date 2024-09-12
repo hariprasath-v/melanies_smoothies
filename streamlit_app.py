@@ -36,7 +36,7 @@ if ingredients_list:
     fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
     #fv_df_pandas = pd.DataFrame(fruityvice_response.json())
     #fv_df_pandas = fv_df_pandas[fv_df_pandas['name'].isin(ingredients_list)]
-    fv_df = st.dataframe(fv_df_pandas,use_container_width=True)
+    fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
 
     for each_fruit in ingredients_list:
         ingredients_string += each_fruit + " "
