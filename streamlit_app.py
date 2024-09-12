@@ -4,6 +4,7 @@ from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 import snowflake.connector
 import requests
+import pandas as pd
 
 # Initialize connection.
 conn = st.connection("snowflake")
@@ -31,6 +32,11 @@ my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT
 ingredients_list = st.multiselect("Choose up to 5 ingredients:",my_dataframe, max_selections =5)
 if ingredients_list:
     ingredients_string = ""
+    
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+    fv_df_pandas = pd.DataFrame(fruityvice_response.json())
+    fv_df_pandas = fv_df_pandas[fv_df_pandas['name'].isin(ingredients_list)]
+    fv_df = st.dataframe(fv_df_pandas,use_container_width=True)
 
     for each_fruit in ingredients_list:
         ingredients_string += each_fruit + " "
@@ -49,7 +55,4 @@ if ingredients_list:
         st.success(f"Your Smoothie is ordered, {name_on_order}!", icon="✅")
 
 
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-#st.text(fruityvice_response.json())
-fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
 
