@@ -29,7 +29,7 @@ session = conn.session()
 def get_fruit_data(fruit):
     response = requests.get(f"{base_url}{fruit}")
     if response.status_code == 200:
-        return response.json()
+        return response
     else:
         return None
         
