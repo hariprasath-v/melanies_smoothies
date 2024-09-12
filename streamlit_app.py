@@ -9,7 +9,7 @@ import pandas as pd
 # Initialize connection.
 conn = st.connection("snowflake")
 
-
+base_url = "https://fruityvice.com/api/fruit/"
 
 
 
@@ -26,7 +26,13 @@ st.write("The name on your smothie will be: ",name_on_order)
 
 session = conn.session()
     
-
+def get_fruit_data(fruit):
+    response = requests.get(f"{base_url}{fruit}")
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+        
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 #st.dataframe(data = my_dataframe, use_container_width=True)
 ingredients_list = st.multiselect("Choose up to 5 ingredients:",my_dataframe, max_selections =5)
@@ -36,8 +42,11 @@ if ingredients_list:
         ingredients_string += fruit_choosen + " "
         st.subheader(fruit_choosen+ ' Nutrition Information')
 
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choosen)
-        fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
+        fruityvice_response = get_fruit_data(fruit_choosen) #requests.get("https://fruityvice.com/api/fruit/" + fruit_choosen)
+        if fruityvice_response:
+            fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
+        else:
+            st.write(f"Nutrition Information Not Available for {fruit_choosen}")
 
     #st.write(ingredients_string)
 
