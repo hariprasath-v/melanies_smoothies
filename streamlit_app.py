@@ -32,14 +32,12 @@ my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT
 ingredients_list = st.multiselect("Choose up to 5 ingredients:",my_dataframe, max_selections =5)
 if ingredients_list:
     ingredients_string = ""
-    
-    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-    #fv_df_pandas = pd.DataFrame(fruityvice_response.json())
-    #fv_df_pandas = fv_df_pandas[fv_df_pandas['name'].isin(ingredients_list)]
-    fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
+    for fruit_choosen in ingredients_list:
+        ingredients_string += fruit_choosen + " "
+        st.subheader(fruit_choosen+ ' Nutrition Information')
 
-    for each_fruit in ingredients_list:
-        ingredients_string += each_fruit + " "
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choosen)
+        fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
 
     #st.write(ingredients_string)
 
