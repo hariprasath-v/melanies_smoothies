@@ -40,10 +40,9 @@ if ingredients_list:
     ingredients_string = ""
     for fruit_choosen in ingredients_list:
         ingredients_string += fruit_choosen + " "
-        st.subheader(fruit_choosen+ ' Nutrition Information')
-
         fruityvice_response = get_fruit_data(fruit_choosen) #requests.get("https://fruityvice.com/api/fruit/" + fruit_choosen)
         if fruityvice_response:
+            st.subheader(fruit_choosen+ ' Nutrition Information')
             fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
         else:
             st.write(f"Nutrition Information Not Available for {fruit_choosen}")
