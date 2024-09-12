@@ -3,7 +3,7 @@ import streamlit as st
 from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 import snowflake.connector
-
+import requests
 
 # Initialize connection.
 conn = st.connection("snowflake")
@@ -48,4 +48,7 @@ if ingredients_list:
         session.sql(my_insert_stmt).collect()
         st.success(f"Your Smoothie is ordered, {name_on_order}!", icon="✅")
 
+
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response)
 
