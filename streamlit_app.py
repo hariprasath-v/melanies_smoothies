@@ -42,16 +42,16 @@ pd_df = my_dataframe.to_pandas()
 ingredients_list = st.multiselect("Choose up to 5 ingredients:",pd_df['FRUIT_NAME'].unique(), max_selections =5)
 if ingredients_list:
     ingredients_string = ""
-    for fruit_choosen in ingredients_list:
-        ingredients_string += fruit_choosen + " "
+    for fruit_chosen in ingredients_list:
+        ingredients_string += fruit_chosen + " "
         search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
         st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
-        fruityvice_response = get_fruit_data(fruit_choosen) #requests.get("https://fruityvice.com/api/fruit/" + fruit_choosen)
+        fruityvice_response = get_fruit_data(fruit_chosen) #requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
         if fruityvice_response:
-            st.subheader(fruit_choosen+ ' Nutrition Information')
+            st.subheader(fruit_chosen+ ' Nutrition Information')
             fv_df = st.dataframe(fruityvice_response.json(),use_container_width=True)
         else:
-            st.write(f"Nutrition Information Not Available for {fruit_choosen}")
+            st.write(f"Nutrition Information Not Available for {fruit_chosen}")
 
     #st.write(ingredients_string)
 
